@@ -58,7 +58,7 @@ Resources:
       Targets: 
         - Arn: !GetAtt "EC2AutoOn.Arn"
           Id: "ec2_on"
-
+           
   OffTimer:
     Type: "AWS::Events::Rule"
     Properties:
@@ -66,7 +66,7 @@ Resources:
       ScheduleExpression: "cron(0 17 * * ? *)"
       Targets:
         - Arn: !GetAtt "EC2AutoOff.Arn"
-           Id: "ec2_off"
+          Id: "ec2_off"
 
   LambdaOnPermission: 
     Type: "AWS::Lambda::Permission"
