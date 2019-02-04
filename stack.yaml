@@ -37,9 +37,6 @@ Resources:
       Runtime: "python3.7"
       Timeout: 10
       CodeUri: ./functions
-      Environment:
-        Variables:
-          SES_ID: !GetAtt "EmailBoi.Arn" 
     
   EC2AutoOn:
     Type: "AWS::Serverless::Function"
