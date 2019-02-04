@@ -18,9 +18,9 @@ def handler(event, context):
             State = instance["State"]["Name"]
 
             # if running
-            if State == "running":
+            if State is "running":
                 # turn off
-                running_instances.add( InstanceId )
+                running_instances.append( InstanceId )
 
 
     response = ec2_client.stop_instances(InstanceIds=running_instances, Hibernate=False)

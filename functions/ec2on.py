@@ -20,7 +20,7 @@ def handler(event, context):
             # if running
             if State not "running":
                 # turn off
-                stopped_instances.add( InstanceId )
+                stopped_instances.append( InstanceId )
 
 
     response = ec2_client.start_instances(InstanceIds=stopped_instances)
