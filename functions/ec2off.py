@@ -23,4 +23,4 @@ def handler(event, context):
                 running_instances.append( InstanceId )
 
 
-    response = ec2_client.stop_instances(InstanceIds=running_instances, Hibernate=False)
+    response = ec2_client.stop_instances(InstanceIds=running_instances)
