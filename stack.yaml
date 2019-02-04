@@ -54,7 +54,7 @@ Resources:
     Type: "AWS::Events::Rule"
     Properties:
       Description: "Triggers every day at 5 AM"
-      ScheduleExpression: "cron(0 5 * * ? *)"
+      ScheduleExpression: "cron(0 10 * * ? *)"
       Targets: 
         - Arn: !GetAtt "EC2AutoOn.Arn"
           Id: "ec2_on"
@@ -63,7 +63,7 @@ Resources:
     Type: "AWS::Events::Rule"
     Properties:
       Description: "Triggers every day at 5 PM"
-      ScheduleExpression: "cron(0 17 * * ? *)"
+      ScheduleExpression: "cron(0 22 * * ? *)"
       Targets:
         - Arn: !GetAtt "EC2AutoOff.Arn"
           Id: "ec2_off"
