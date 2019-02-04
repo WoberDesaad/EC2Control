@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+Description: "Turns EC2 instances on and off automatically."
+
+Resources:
+  EC2ControlRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action:
+              - "sts:AssumeRole"
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+      Policies:
+        - PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Action:
+                  - "*"
+                Effect: "Allow"
+                Resource:
+                  - "*"
+          PolicyName: "EC2ControlRole"    
+
+  EC2AutoOff:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Description: "Automatically turns EC2 instances off."
+      FunctionName: "ec2off"
+      Handler: "ec2off.handler"
+      MemorySize: 128
+      Role: !GetAtt "EC2ControlRole.Arn"
+      Runtime: "python3.7"
+      Timeout: 10
+      CodeUri: ./functions
+    
+  EC2AutoOn:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Description: "Automatically turns EC2 instances on."
+      FunctionName: "ec2on"
+      Handler: "ec2on.handler"
+      MemorySize: 128
+      Role: !GetAtt "EC2ControlRole.Arn"
+      Runtime: "python3.7"
+      Timeout: 10
+      CodeUri: ./functions
+
+  OnTimer:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Description: "Triggers every day at 5 AM"
+      ScheduleExpression: "cron(5 5 * * ? *)"
+      Targets: 
+        - Arn: !GetAtt "EC2AutoOn.Arn"
+          Id: "ec2_on"
+
+  OffTimer:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Description: "Triggers every day at 5 PM"
+      ScheduleExpression: "cron(17 17 * * ? *)"
+      Targets:
+        - Arn: !GetAtt "EC2AutoOff.Arn"
+           Id: "ec2_off"
+
+  LambdaOnPermission: 
+    Type: "AWS::Lambda::Permission"
+    Properties: 
+      FunctionName: !Ref "EC2AutoOn"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn: !GetAtt "OnTimer.Arn"
+
+  LambdaOffPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: !Ref "EC2AutoOff"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn: !GetAtt "OffTimer.Arn"
+
