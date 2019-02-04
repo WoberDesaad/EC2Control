@@ -37,6 +37,9 @@ Resources:
       Runtime: "python3.7"
       Timeout: 10
       CodeUri: ./functions
+      Environment:
+        Variables:
+          SES_ID: !GetAtt "EmailBoi.Arn" 
     
   EC2AutoOn:
     Type: "AWS::Serverless::Function"
@@ -54,7 +57,7 @@ Resources:
     Type: "AWS::Events::Rule"
     Properties:
       Description: "Triggers every day at 5 AM"
-      ScheduleExpression: "cron(5 5 * * ? *)"
+      ScheduleExpression: "cron(0 5 * * ? *)"
       Targets: 
         - Arn: !GetAtt "EC2AutoOn.Arn"
           Id: "ec2_on"
@@ -63,7 +66,7 @@ Resources:
     Type: "AWS::Events::Rule"
     Properties:
       Description: "Triggers every day at 5 PM"
-      ScheduleExpression: "cron(17 17 * * ? *)"
+      ScheduleExpression: "cron(0 17 * * ? *)"
       Targets:
         - Arn: !GetAtt "EC2AutoOff.Arn"
            Id: "ec2_off"
@@ -83,4 +86,3 @@ Resources:
       Action: "lambda:InvokeFunction"
       Principal: "events.amazonaws.com"
       SourceArn: !GetAtt "OffTimer.Arn"
-
