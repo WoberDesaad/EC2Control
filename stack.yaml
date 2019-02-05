@@ -53,8 +53,8 @@ Resources:
   OnTimer:
     Type: "AWS::Events::Rule"
     Properties:
-      Description: "Triggers every day at 5 AM"
-      ScheduleExpression: "cron(0 10 * * ? *)"
+      Description: "Triggers every day at 8:00 AM"
+      ScheduleExpression: "cron(0 13 * * ? *)"
       Targets: 
         - Arn: !GetAtt "EC2AutoOn.Arn"
           Id: "ec2_on"
@@ -62,8 +62,8 @@ Resources:
   OffTimer:
     Type: "AWS::Events::Rule"
     Properties:
-      Description: "Triggers every day at 5 PM"
-      ScheduleExpression: "cron(0 22 * * ? *)"
+      Description: "Triggers every day at 4:30 PM"
+      ScheduleExpression: "cron(30 21 * * ? *)"
       Targets:
         - Arn: !GetAtt "EC2AutoOff.Arn"
           Id: "ec2_off"
