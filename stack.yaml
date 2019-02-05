@@ -22,18 +22,6 @@ Resources:
               - Action:
                   - "ec2:startInstances"
                   - "ec2:stopInstances"
-                Effect: "Allow"
-                Resource:
-                  - !Join
-                    - ":"
-                    - - 'arn'
-                      - 'aws'
-                      - 'lambda'
-                      - !Ref 'AWS::Region'
-                      - !Ref 'AWS::AccountId'
-                      - 'function'
-                      - 'ec2off'
-              - Action:
                   - "ec2:describeInstances"
                 Effect: "Allow"
                 Resource: "*"
