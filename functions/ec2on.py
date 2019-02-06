@@ -18,7 +18,7 @@ def handler(event, context):
             State = instance["State"]["Name"]
 
             # if running
-            if not State is "running":
+            if not State == "running":
                 # turn off
                 stopped_instances.append( InstanceId )
 
