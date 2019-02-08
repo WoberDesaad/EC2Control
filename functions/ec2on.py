@@ -18,7 +18,7 @@ def handler(event, context):
             State = instance["State"]["Name"]
 
             # if running
-            if not State == "running":
+            if State == "stopped":
                 # turn add to list
                 stopped_instances.append( InstanceId )
 
@@ -26,3 +26,5 @@ def handler(event, context):
     if len(stopped_instances) > 0:
         response = ec2_client.start_instances(InstanceIds=stopped_instances)
 
+
+    return len(stopped_instances)

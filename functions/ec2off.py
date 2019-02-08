@@ -25,3 +25,5 @@ def handler(event, context):
 
     if len(running_instances) > 0:
         response = ec2_client.stop_instances(InstanceIds=running_instances)
+
+    return len(running_instances)
